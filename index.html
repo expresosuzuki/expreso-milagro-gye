@@ -544,10 +544,10 @@
     <div class="container">
         <div class="header">
             <h1>?? Expreso Milagro-GYE</h1>
-            <p>Katherine • Fanny • Greta • María • Jesennia</p>
+            <p>Katherine Â• Fanny Â• Greta Â• MarÃ­a Â• Jesennia</p>
         </div>
 
-        <!-- Estadísticas -->
+        <!-- EstadÃ­sticas -->
         <div class="stats-grid">
             <div class="stat-box">
                 <div class="stat-value" id="totalHoy">$0.00</div>
@@ -592,7 +592,7 @@
             </div>
 
             <button class="btn btn-primary" onclick="guardarRegistro()">
-                ?? Guardar Registro del Día
+                ?? Guardar Registro del DÃ­a
             </button>
         </div>
 
@@ -618,17 +618,17 @@
             <div class="records-list" id="recordsList">
                 <div class="empty-state">
                     <div class="empty-state-icon">??</div>
-                    <p>No hay registros aún</p>
+                    <p>No hay registros aÃºn</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Confirmación -->
+    <!-- Modal de ConfirmaciÃ³n -->
     <div class="modal" id="deleteModal">
         <div class="modal-content">
-            <h3>¿Eliminar registro?</h3>
-            <p>Esta acción no se puede deshacer</p>
+            <h3>Â¿Eliminar registro?</h3>
+            <p>Esta acciÃ³n no se puede deshacer</p>
             <div class="modal-buttons">
                 <button class="modal-btn modal-cancel" onclick="cerrarModal()">Cancelar</button>
                 <button class="modal-btn modal-confirm" onclick="confirmarEliminar()">Eliminar</button>
@@ -637,15 +637,15 @@
     </div>
 
     <script>
-        // Configuración de tarifas
+        // ConfiguraciÃ³n de tarifas
         const TARIFAS = {
             NORMAL: { ida: 3.50, vuelta: 3.50, completo: 7.00 },
             ESPECIAL: { ida: 2.50, vuelta: 2.50, completo: 5.00 }
         };
 
-        const NOMBRES_PASAJERAS = ['Katherine', 'Fanny', 'Greta', 'María', 'Jesennia'];
+        const NOMBRES_PASAJERAS = ['Katherine', 'Fanny', 'Greta', 'MarÃ­a', 'Jesennia'];
         const INICIALES = ['K', 'F', 'G', 'M', 'J'];
-        const ES_GRETA_ESPECIAL = [false, false, true, false, false]; // Solo Greta (índice 2) es especial
+        const ES_GRETA_ESPECIAL = [false, false, true, false, false]; // Solo Greta (Ã­ndice 2) es especial
 
         // Estado
         let pasajeras = NOMBRES_PASAJERAS.map((nombre, i) => ({
@@ -660,7 +660,7 @@
         let registros = JSON.parse(localStorage.getItem('expresoRegistros')) || [];
         let registroAEliminar = null;
 
-        // Inicialización
+        // InicializaciÃ³n
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('fechaServicio').valueAsDate = new Date();
             renderizarPasajeras();
@@ -719,7 +719,7 @@
 
         function cambiarTipo(index, tipo, event) {
             event.stopPropagation();
-            // Si ya está seleccionado este tipo, lo deseleccionamos (volvemos a 'ninguno')
+            // Si ya estÃ¡ seleccionado este tipo, lo deseleccionamos (volvemos a 'ninguno')
             if (pasajeras[index].tipo === tipo) {
                 pasajeras[index].tipo = 'ninguno';
             } else {
@@ -817,12 +817,12 @@
             actualizarTotales();
             renderizarRegistros();
 
-            // Feedback táctil y visual
+            // Feedback tÃ¡ctil y visual
             if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
             
             const btn = document.querySelector('.btn-primary');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '? ¡Registro Guardado!';
+            btn.innerHTML = '? Â¡Registro Guardado!';
             btn.style.background = '#10b981';
             setTimeout(() => {
                 btn.innerHTML = originalText;
@@ -858,7 +858,7 @@
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">??</div>
-                        <p>No hay registros aún</p>
+                        <p>No hay registros aÃºn</p>
                     </div>
                 `;
                 return;
@@ -898,7 +898,7 @@
                             <span class="record-date">${formatearFecha(r.fecha)}</span>
                             <div style="display: flex; align-items: center;">
                                 <span class="record-amount">$${r.resumen.total.toFixed(2)}</span>
-                                <button class="delete-btn" onclick="eliminarRegistro(${r.id})">×</button>
+                                <button class="delete-btn" onclick="eliminarRegistro(${r.id})">Ã—</button>
                             </div>
                         </div>
                         <div class="record-passengers">
@@ -942,7 +942,7 @@
                 return;
             }
 
-            let csv = 'Fecha,Katherine,Fanny,Greta (Especial),María,Jesennia,Total\n';
+            let csv = 'Fecha,Katherine,Fanny,Greta (Especial),MarÃ­a,Jesennia,Total\n';
             
             registros.forEach(r => {
                 const fila = [r.fecha];
