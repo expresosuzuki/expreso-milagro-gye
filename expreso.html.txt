@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Expreso Milagro-Guayaquil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 25px;
+            padding-top: 10px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+
+        .passenger-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .passenger-item {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .passenger-item:hover {
+            transform: translateX(5px);
+        }
+
+        .passenger-item.active-ida {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .passenger-item.active-vuelta {
+            background: #fce7f3;
+            border-color: #ec4899;
+            color: #9d174d;
+        }
+
+        .passenger-item.active-completo {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: #10b981;
+            color: #065f46;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Estilo especial para Greta */
+        .passenger-item.especial {
+            border-left: 5px solid #f59e0b;
+        }
+
+        .passenger-item.especial::before {
+            content: "? ESPECIAL";
+            position: absolute;
+            top: -1px;
+            right: 10px;
+            background: #f59e0b;
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 0 0 8px 8px;
+            font-weight: bold;
+        }
+
+        .passenger-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .passenger-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .passenger-item.active-ida .passenger-avatar,
+        .passenger-item.active-vuelta .passenger-avatar,
+        .passenger-item.active-completo .passenger-avatar {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .passenger-details h4 {
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+
+        .passenger-details .tarifa-info {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .passenger-details span {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: 600;
+        }
+
+        .passenger-toggle {
+            display: flex;
+            background: rgba(255,255,255,0.5);
+            border-radius: 20px;
+            padding: 3px;
+            gap: 3px;
+        }
+
+        .toggle-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 10px;
+            border-radius: 16px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #999;
+            min-width: 55px;
+            line-height: 1.2;
+        }
+
+        .toggle-btn.active {
+            background: white;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .passenger-item.active-ida .toggle-btn[data-type="ida"].active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .passenger-item.active-vuelta .toggle-btn[data-type="vuelta"].active {
+            background: #ec4899;
+            color: white;
+        }
+
+        .passenger-item.active-completo .toggle-btn[data-type="completo"].active {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin-top: 10px;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .records-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .record-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .record-date {
+            font-weight: 700;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .record-amount {
+            font-weight: bold;
+            color: #059669;
+            font-size: 1.2rem;
+        }
+
+        .record-passengers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .record-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-ida {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-vuelta {
+            background: #fce7f3;
+            color: #9d174d;
+        }
+
+        .badge-completo {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-especial {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .summary-section {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        .export-btn {
+            background: white;
+            color: #667eea;
+            margin-top: 15px;
+            border: 2px solid #667eea;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .modal h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .modal-confirm {
+            background: #dc2626;
+            color: white;
+        }
+
+        .modal-cancel {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .total-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #0ea5e9;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .total-label {
+            font-size: 0.9rem;
+            color: #0369a1;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .total-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #0284c7;
+        }
+
+        .total-breakdown {
+            font-size: 0.8rem;
+            color: #0369a1;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .quick-btn {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .quick-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .legend {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 380px) {
+            .passenger-toggle {
+                flex-direction: column;
+                gap: 2px;
+            }
+            .toggle-btn {
+                padding: 6px;
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>?? Expreso Milagro-GYE</h1>
+            <p>Katherine • Fanny • Greta • María • Jesennia</p>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value" id="totalHoy">$0.00</div>
+                <div class="stat-label">Total Hoy</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="totalSemana">$0.00</div>
+                <div class="stat-label">Esta Semana</div>
+            </div>
+        </div>
+
+        <!-- Formulario Principal -->
+        <div class="card">
+            <div class="form-group">
+                <label>?? Fecha del Servicio</label>
+                <input type="date" id="fechaServicio" required>
+            </div>
+
+            <div class="legend">
+                <span>?</span>
+                <strong>Greta tiene tarifa especial:</strong> $2.50 ida / $2.50 vuelta / $5.00 completo
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <div class="quick-actions">
+                    <button class="quick-btn" onclick="seleccionarTodas('completo')">? Todas Completo</button>
+                    <button class="quick-btn" onclick="limpiarSeleccion()">? Limpiar Todo</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>?? Selecciona el tipo de viaje:</label>
+                <div class="passenger-list" id="passengerList">
+                    <!-- Generado por JS -->
+                </div>
+            </div>
+
+            <div class="total-box">
+                <div class="total-label">TOTAL A COBRAR</div>
+                <div class="total-amount">$<span id="calculatedTotal">0.00</span></div>
+                <div class="total-breakdown" id="totalBreakdown">0 pasajeras seleccionadas</div>
+            </div>
+
+            <button class="btn btn-primary" onclick="guardarRegistro()">
+                ?? Guardar Registro del Día
+            </button>
+        </div>
+
+        <!-- Resumen -->
+        <div class="card summary-section">
+            <h3 style="margin-bottom: 15px;">?? Resumen del Mes</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span>Total Acumulado:</span>
+                <strong style="font-size: 1.3rem;" id="totalMes">$0.00</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; opacity: 0.9;">
+                <span>Viajes registrados:</span>
+                <span id="totalViajes">0</span>
+            </div>
+            <button class="btn export-btn" onclick="exportarExcel()">
+                ?? Exportar a Excel
+            </button>
+        </div>
+
+        <!-- Historial -->
+        <div class="card">
+            <h3 style="margin-bottom: 15px; color: #333;">?? Historial de Viajes</h3>
+            <div class="records-list" id="recordsList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">??</div>
+                    <p>No hay registros aún</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <h3>¿Eliminar registro?</h3>
+            <p>Esta acción no se puede deshacer</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-cancel" onclick="cerrarModal()">Cancelar</button>
+                <button class="modal-btn modal-confirm" onclick="confirmarEliminar()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de tarifas
+        const TARIFAS = {
+            NORMAL: { ida: 3.50, vuelta: 3.50, completo: 7.00 },
+            ESPECIAL: { ida: 2.50, vuelta: 2.50, completo: 5.00 }
+        };
+
+        const NOMBRES_PASAJERAS = ['Katherine', 'Fanny', 'Greta', 'María', 'Jesennia'];
+        const INICIALES = ['K', 'F', 'G', 'M', 'J'];
+        const ES_GRETA_ESPECIAL = [false, false, true, false, false]; // Solo Greta (índice 2) es especial
+
+        // Estado
+        let pasajeras = NOMBRES_PASAJERAS.map((nombre, i) => ({
+            id: i + 1,
+            nombre: nombre,
+            inicial: INICIALES[i],
+            esEspecial: ES_GRETA_ESPECIAL[i],
+            tarifa: ES_GRETA_ESPECIAL[i] ? TARIFAS.ESPECIAL : TARIFAS.NORMAL,
+            tipo: 'ninguno' // 'ninguno', 'ida', 'vuelta', 'completo'
+        }));
+        
+        let registros = JSON.parse(localStorage.getItem('expresoRegistros')) || [];
+        let registroAEliminar = null;
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('fechaServicio').valueAsDate = new Date();
+            renderizarPasajeras();
+            actualizarTotales();
+            renderizarRegistros();
+        });
+
+        function renderizarPasajeras() {
+            const container = document.getElementById('passengerList');
+            container.innerHTML = '';
+
+            pasajeras.forEach((p, index) => {
+                const item = document.createElement('div');
+                const claseEspecial = p.esEspecial ? 'especial' : '';
+                item.className = `passenger-item ${claseEspecial} ${p.tipo !== 'ninguno' ? 'active-' + p.tipo : ''}`;
+                
+                const tarifaText = p.esEspecial ? '? $2.50/$5.00' : '$3.50/$7.00';
+                
+                item.innerHTML = `
+                    <div class="passenger-info">
+                        <div class="passenger-avatar">${p.inicial}</div>
+                        <div class="passenger-details">
+                            <h4>${p.nombre} ${p.esEspecial ? '?' : ''}</h4>
+                            <div class="tarifa-info">Tarifa: ${tarifaText}</div>
+                            <span id="status-${index}">${obtenerTextoEstado(p.tipo)}</span>
+                        </div>
+                    </div>
+                    <div class="passenger-toggle">
+                        <button class="toggle-btn ${p.tipo === 'ida' ? 'active' : ''}" 
+                                data-type="ida" onclick="cambiarTipo(${index}, 'ida', event)">
+                            IDA<br>$${p.tarifa.ida.toFixed(2)}
+                        </button>
+                        <button class="toggle-btn ${p.tipo === 'vuelta' ? 'active' : ''}" 
+                                data-type="vuelta" onclick="cambiarTipo(${index}, 'vuelta', event)">
+                            VUELTA<br>$${p.tarifa.vuelta.toFixed(2)}
+                        </button>
+                        <button class="toggle-btn ${p.tipo === 'completo' ? 'active' : ''}" 
+                                data-type="completo" onclick="cambiarTipo(${index}, 'completo', event)">
+                            COMPLETO<br>$${p.tarifa.completo.toFixed(2)}
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(item);
+            });
+
+            calcularTotal();
+        }
+
+        function obtenerTextoEstado(tipo) {
+            if (tipo === 'ninguno') return 'No viaja ?';
+            if (tipo === 'ida') return 'Solo ida ??';
+            if (tipo === 'vuelta') return 'Solo vuelta ??';
+            if (tipo === 'completo') return 'Ida y vuelta ??';
+        }
+
+        function cambiarTipo(index, tipo, event) {
+            event.stopPropagation();
+            // Si ya está seleccionado este tipo, lo deseleccionamos (volvemos a 'ninguno')
+            if (pasajeras[index].tipo === tipo) {
+                pasajeras[index].tipo = 'ninguno';
+            } else {
+                pasajeras[index].tipo = tipo;
+            }
+            renderizarPasajeras();
+        }
+
+        function seleccionarTodas(tipo) {
+            pasajeras.forEach(p => p.tipo = tipo);
+            renderizarPasajeras();
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+
+        function limpiarSeleccion() {
+            pasajeras.forEach(p => p.tipo = 'ninguno');
+            renderizarPasajeras();
+        }
+
+        function calcularTotal() {
+            let total = 0;
+            let countIda = 0;
+            let countVuelta = 0;
+            let countCompleto = 0;
+            let countEspecial = 0;
+            let detalles = [];
+
+            pasajeras.forEach(p => {
+                if (p.tipo === 'ida') { 
+                    total += p.tarifa.ida; 
+                    countIda++;
+                    if (p.esEspecial) countEspecial++;
+                }
+                else if (p.tipo === 'vuelta') { 
+                    total += p.tarifa.vuelta; 
+                    countVuelta++;
+                    if (p.esEspecial) countEspecial++;
+                }
+                else if (p.tipo === 'completo') { 
+                    total += p.tarifa.completo; 
+                    countCompleto++;
+                    if (p.esEspecial) countEspecial++;
+                }
+            });
+
+            const totalPasajeras = countIda + countVuelta + countCompleto;
+            
+            document.getElementById('calculatedTotal').textContent = total.toFixed(2);
+            
+            let breakdownText = `${totalPasajeras} pasajeras: `;
+            if (countIda > 0) breakdownText += `${countIda} ida `;
+            if (countVuelta > 0) breakdownText += `${countVuelta} vuelta `;
+            if (countCompleto > 0) breakdownText += `${countCompleto} completo `;
+            if (countEspecial > 0) breakdownText += `(${countEspecial} con tarifa especial)`;
+            
+            document.getElementById('totalBreakdown').textContent = totalPasajeras > 0 ? breakdownText : '0 pasajeras seleccionadas';
+            
+            return { total, countIda, countVuelta, countCompleto, countEspecial };
+        }
+
+        function guardarRegistro() {
+            const fecha = document.getElementById('fechaServicio').value;
+            if (!fecha) {
+                alert('Por favor selecciona una fecha');
+                return;
+            }
+
+            const pasajerasActivas = pasajeras.filter(p => p.tipo !== 'ninguno');
+            if (pasajerasActivas.length === 0) {
+                alert('Selecciona al menos una pasajera');
+                return;
+            }
+
+            const calculo = calcularTotal();
+            const registro = {
+                id: Date.now(),
+                fecha: fecha,
+                fechaObj: new Date(fecha).toISOString(),
+                pasajeras: JSON.parse(JSON.stringify(pasajeras)),
+                resumen: {
+                    total: calculo.total,
+                    ida: calculo.countIda,
+                    vuelta: calculo.countVuelta,
+                    completo: calculo.countCompleto,
+                    especiales: calculo.countEspecial
+                },
+                timestamp: new Date().toISOString()
+            };
+
+            registros.unshift(registro);
+            localStorage.setItem('expresoRegistros', JSON.stringify(registros));
+
+            // Resetear formulario
+            limpiarSeleccion();
+            actualizarTotales();
+            renderizarRegistros();
+
+            // Feedback táctil y visual
+            if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
+            
+            const btn = document.querySelector('.btn-primary');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '? ¡Registro Guardado!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+            }, 2000);
+        }
+
+        function actualizarTotales() {
+            const hoy = new Date().toISOString().split('T')[0];
+            const inicioSemana = new Date();
+            inicioSemana.setDate(inicioSemana.getDate() - inicioSemana.getDay());
+            
+            const totalHoy = registros
+                .filter(r => r.fecha === hoy)
+                .reduce((sum, r) => sum + r.resumen.total, 0);
+            
+            const totalSemana = registros
+                .filter(r => new Date(r.fecha) >= inicioSemana)
+                .reduce((sum, r) => sum + r.resumen.total, 0);
+
+            const totalMes = registros.reduce((sum, r) => sum + r.resumen.total, 0);
+
+            document.getElementById('totalHoy').textContent = `$${totalHoy.toFixed(2)}`;
+            document.getElementById('totalSemana').textContent = `$${totalSemana.toFixed(2)}`;
+            document.getElementById('totalMes').textContent = `$${totalMes.toFixed(2)}`;
+            document.getElementById('totalViajes').textContent = registros.length;
+        }
+
+        function renderizarRegistros() {
+            const container = document.getElementById('recordsList');
+            
+            if (registros.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">??</div>
+                        <p>No hay registros aún</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = registros.map(r => {
+                const detalles = r.pasajeras
+                    .filter(p => p.tipo !== 'ninguno')
+                    .map(p => {
+                        let clase = '';
+                        let icono = '';
+                        let monto = 0;
+                        
+                        if (p.tipo === 'ida') { 
+                            clase = p.esEspecial ? 'badge-especial' : 'badge-ida'; 
+                            icono = '??'; 
+                            monto = p.tarifa.ida;
+                        }
+                        else if (p.tipo === 'vuelta') { 
+                            clase = p.esEspecial ? 'badge-especial' : 'badge-vuelta'; 
+                            icono = '??'; 
+                            monto = p.tarifa.vuelta;
+                        }
+                        else if (p.tipo === 'completo') { 
+                            clase = p.esEspecial ? 'badge-especial' : 'badge-completo'; 
+                            icono = '??'; 
+                            monto = p.tarifa.completo;
+                        }
+                        
+                        const especialTag = p.esEspecial ? '? ' : '';
+                        return `<span class="record-badge ${clase}">${icono} ${especialTag}${p.nombre} ($${monto.toFixed(2)})</span>`;
+                    }).join('');
+
+                return `
+                    <div class="record-item">
+                        <div class="record-header">
+                            <span class="record-date">${formatearFecha(r.fecha)}</span>
+                            <div style="display: flex; align-items: center;">
+                                <span class="record-amount">$${r.resumen.total.toFixed(2)}</span>
+                                <button class="delete-btn" onclick="eliminarRegistro(${r.id})">×</button>
+                            </div>
+                        </div>
+                        <div class="record-passengers">
+                            ${detalles}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatearFecha(fechaStr) {
+            const fecha = new Date(fechaStr + 'T00:00:00');
+            const opciones = { weekday: 'short', day: 'numeric', month: 'short', year: '2-digit' };
+            return fecha.toLocaleDateString('es-EC', opciones);
+        }
+
+        function eliminarRegistro(id) {
+            registroAEliminar = id;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function confirmarEliminar() {
+            if (registroAEliminar) {
+                registros = registros.filter(r => r.id !== registroAEliminar);
+                localStorage.setItem('expresoRegistros', JSON.stringify(registros));
+                actualizarTotales();
+                renderizarRegistros();
+                registroAEliminar = null;
+            }
+            cerrarModal();
+        }
+
+        function cerrarModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            registroAEliminar = null;
+        }
+
+        function exportarExcel() {
+            if (registros.length === 0) {
+                alert('No hay registros para exportar');
+                return;
+            }
+
+            let csv = 'Fecha,Katherine,Fanny,Greta (Especial),María,Jesennia,Total\n';
+            
+            registros.forEach(r => {
+                const fila = [r.fecha];
+                r.pasajeras.forEach(p => {
+                    let texto = '';
+                    let monto = 0;
+                    if (p.tipo === 'ninguno') texto = 'No viaja';
+                    else if (p.tipo === 'ida') {
+                        monto = p.tarifa.ida;
+                        texto = p.esEspecial ? `Ida Especial ($${monto.toFixed(2)})` : `Ida ($${monto.toFixed(2)})`;
+                    }
+                    else if (p.tipo === 'vuelta') {
+                        monto = p.tarifa.vuelta;
+                        texto = p.esEspecial ? `Vuelta Especial ($${monto.toFixed(2)})` : `Vuelta ($${monto.toFixed(2)})`;
+                    }
+                    else if (p.tipo === 'completo') {
+                        monto = p.tarifa.completo;
+                        texto = p.esEspecial ? `Completo Especial ($${monto.toFixed(2)})` : `Completo ($${monto.toFixed(2)})`;
+                    }
+                    fila.push(texto);
+                });
+                fila.push(r.resumen.total.toFixed(2));
+                csv += fila.join(',') + '\n';
+            });
+
+            // Agregar resumen
+            csv += '\nRESUMEN,,,,,\n';
+            
+            // Contar por tipo y tarifa
+            let totalIdaNormal = 0, totalIdaEspecial = 0;
+            let totalVueltaNormal = 0, totalVueltaEspecial = 0;
+            let totalCompletoNormal = 0, totalCompletoEspecial = 0;
+            
+            registros.forEach(r => {
+                r.pasajeras.forEach(p => {
+                    if (p.tipo === 'ida') {
+                        if (p.esEspecial) totalIdaEspecial++;
+                        else totalIdaNormal++;
+                    } else if (p.tipo === 'vuelta') {
+                        if (p.esEspecial) totalVueltaEspecial++;
+                        else totalVueltaNormal++;
+                    } else if (p.tipo === 'completo') {
+                        if (p.esEspecial) totalCompletoEspecial++;
+                        else totalCompletoNormal++;
+                    }
+                });
+            });
+            
+            csv += `Viajes Ida Normal (K,F,M,J),${totalIdaNormal},$${(totalIdaNormal * TARIFAS.NORMAL.ida).toFixed(2)}\n`;
+            csv += `Viajes Ida Especial (Greta),${totalIdaEspecial},$${(totalIdaEspecial * TARIFAS.ESPECIAL.ida).toFixed(2)}\n`;
+            csv += `Viajes Vuelta Normal (K,F,M,J),${totalVueltaNormal},$${(totalVueltaNormal * TARIFAS.NORMAL.vuelta).toFixed(2)}\n`;
+            csv += `Viajes Vuelta Especial (Greta),${totalVueltaEspecial},$${(totalVueltaEspecial * TARIFAS.ESPECIAL.vuelta).toFixed(2)}\n`;
+            csv += `Viajes Completo Normal (K,F,M,J),${totalCompletoNormal},$${(totalCompletoNormal * TARIFAS.NORMAL.completo).toFixed(2)}\n`;
+            csv += `Viajes Completo Especial (Greta),${totalCompletoEspecial},$${(totalCompletoEspecial * TARIFAS.ESPECIAL.completo).toFixed(2)}\n`;
+            csv += '\n';
+            csv += `TOTAL GENERAL,,,$${registros.reduce((sum, r) => sum + r.resumen.total, 0).toFixed(2)}\n`;
+
+            // Descargar
+            const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Expreso_Milagro_GYE_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+
+            if (navigator.vibrate) navigator.vibrate([50, 100, 50]);
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('deleteModal').addEventListener('click', (e) => {
+            if (e.target.id === 'deleteModal') cerrarModal();
+        });
+    </script>
+</body>
+</html>
